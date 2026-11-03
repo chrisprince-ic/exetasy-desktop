@@ -1,5 +1,5 @@
 import { ContinueWithChatGPTButton } from "@siwc/react";
-import { Avatar, Icon, Labeled, useToast } from "../ui";
+import { Avatar, Icon, Labeled, Switch, useToast } from "../ui";
 import { isFailure, type ChatGPTModel, type SessionState, type Stats } from "../types";
 
 export function Settings({
@@ -12,6 +12,8 @@ export function Settings({
   onSignIn,
   onDisconnect,
   onOpenUsage,
+  analytics,
+  onAnalyticsChange,
 }: {
   session: SessionState | null;
   models: ChatGPTModel[];
@@ -22,6 +24,9 @@ export function Settings({
   onSignIn: () => void;
   onDisconnect: () => void;
   onOpenUsage: () => void;
+  /** Null when this build cannot send usage counts. */
+  analytics: boolean | null;
+  onAnalyticsChange: (on: boolean) => void;
 }) {
   const toast = useToast();
   const connected = session?.status === "connected";
@@ -102,6 +107,14 @@ export function Settings({
           <h2 className="h-card">Your data</h2>
           <p style={{ font: "400 13.5px/19px var(--font)", color: "var(--ink-4)", marginTop: 4 }}>Everything below is stored on this computer only.</p>
         </div>
+        {analytics !== null && (
+          <Switch
+            on={analytics}
+            onChange={onAnalyticsChange}
+            title="Share anonymous usage counts"
+            detail="Counts like “an exam was generated, 10 questions”. Never names, files, questions, answers or scores."
+          />
+        )}
         <div className="grid-fit" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
           {[
             ["Courses", stats?.courses],

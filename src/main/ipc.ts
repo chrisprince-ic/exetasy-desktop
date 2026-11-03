@@ -17,6 +17,7 @@ import { generateExam, type GenerateExamInput } from "./generate.js";
 import { gradeAttempt, type GradeInput } from "./grade.js";
 import { computeReadiness } from "./readiness.js";
 import { addPastedMaterial, commitMaterial, pickMaterials } from "./materials.js";
+import { analyticsAvailable, track } from "./analytics.js";
 import * as store from "./store.js";
 
 interface Failure {
@@ -72,7 +73,11 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
 
   /* ------------------------- ChatGPT account ------------------------- */
   handle("chatgpt:getSession", () => getChatGPT().getSession());
-  handle("chatgpt:signIn", () => getChatGPT().signIn());
+  handle("chatgpt:signIn", async () => {
+    const state = await getChatGPT().signIn();
+    if (state.status === "connected") track("signed_in");
+    return state;
+  });
   handle("chatgpt:disconnect", () => getChatGPT().disconnect());
   handle("chatgpt:listModels", () => getChatGPT().listModels());
   handle("chatgpt:openUsage", () => shell.openExternal(CHATGPT_USAGE_URL));
@@ -83,8 +88,15 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
     const { exams, attempts, profiles } = await store.readinessInputs(courseId);
     return computeReadiness(exams, attempts, profiles);
   });
-  handle("store:settings", () => store.getSettings());
-  handle("store:updateSettings", (patch: Partial<store.Settings>) => store.updateSettings(patch));
+  handle("store:settings", async () => ({ ...(await store.getSettings()), analyticsAvailable }));
+  handle("store:updateSettings", async (patch: Partial<store.Settings> & { analyticsAvailable?: unknown }) => {
+    const { analyticsAvailable: _readOnly, ...rest } = patch;
+    const before = await store.getSettings();
+    const saved = await store.updateSettings(rest);
+    // Count the session in which someone opts in.
+    if (rest.analytics === true && before.analytics !== true) track("app_started");
+    return { ...saved, analyticsAvailable };
+  });
   handle("store:touchStreak", () => store.touchStreak());
 
   handle("courses:list", () => store.listCourses());
@@ -100,10 +112,16 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
 
   handle("materials:list", (courseId?: string) => store.listMaterials(courseId));
   handle("materials:pick", () => pickMaterials());
-  handle("materials:commit", (input: Parameters<typeof commitMaterial>[0]) => commitMaterial(input));
-  handle("materials:addText", (input: { courseId: string; title: string; text: string }) =>
-    addPastedMaterial(input.courseId, input.title, input.text),
-  );
+  handle("materials:commit", async (input: Parameters<typeof commitMaterial>[0]) => {
+    const material = await commitMaterial(input);
+    track("material_added", { kind: input.kind, ocr: input.method === "ocr" });
+    return material;
+  });
+  handle("materials:addText", async (input: { courseId: string; title: string; text: string }) => {
+    const material = await addPastedMaterial(input.courseId, input.title, input.text);
+    track("material_added", { kind: "pasted", ocr: false });
+    return material;
+  });
   handle("materials:delete", (id: string) => store.deleteMaterial(id));
 
   handle("exams:list", (courseId?: string) => store.listExams(courseId));
@@ -132,6 +150,16 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
         questions: stats.questions,
         timeLimit: input.timeLimit,
         feedback: input.feedback === "each" ? "each" : "end",
+      });
+
+      track("exam_generated", {
+        questions: stats.questions.length,
+        withMaterial: input.materialIds.length > 0,
+        written: input.saCount + input.laCount > 0,
+        timed: input.timeLimit > 0,
+        answersAtEnd: input.feedback !== "each",
+        customInstructions: Boolean(input.instructions?.trim()),
+        drill: (input.focusTopics?.length ?? 0) === 1,
       });
 
       return {
@@ -172,6 +200,7 @@ ${q.explanation}` : ""}`
         return back.trim() ? [{ front: q.text, back, topic }] : [];
       });
       await store.addMistakes(attempt.courseId, missed);
+      track("exam_submitted", { questions: input.questions.length });
       return result;
     },
   );
@@ -229,8 +258,10 @@ Return ONLY this JSON:
   handle("decks:delete", (id: string) => store.deleteDeck(id));
 
   /* ------------------------------- coach ------------------------------ */
-  handle("coach:ask", (input: CoachInput) =>
-    askCoach(input, (delta) => getWindow()?.webContents.send("coach:delta", delta)),
+  handle("coach:ask", (input: CoachInput) => {
+    track("coach_question");
+    return askCoach(input, (delta) => getWindow()?.webContents.send("coach:delta", delta));
+  },
   );
 
   /* ---------------------------- utilities ---------------------------- */

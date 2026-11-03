@@ -13,3 +13,8 @@ src/renderer/public/tesseract/
 
 # spike/credential output never belongs in the repo
 **/.siwc-data/
+
+# local secrets and build-time keys
+.env
+.env.*
+!.env.example

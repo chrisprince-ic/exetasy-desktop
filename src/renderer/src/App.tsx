@@ -3,7 +3,7 @@ import { ContinueWithChatGPTButton } from "@siwc/react";
 import { AppShell, NAV, examCountdown, type PaletteItem, type Route } from "./AppShell";
 import { CourseDialog, NewExamDialog, examMinutes, questionMix, type ExamConfig, type ExamPreset } from "./dialogs";
 import { rankTopics } from "./plan";
-import { EmptyState, Icon, IS_MAC, Logo, longDate, useToast } from "./ui";
+import { EmptyState, Icon, IS_MAC, Logo, Modal, longDate, useToast } from "./ui";
 import { Overview } from "./pages/Overview";
 import { Exams } from "./pages/Exams";
 import { Generating } from "./pages/Generating";
@@ -61,6 +61,14 @@ export function App() {
   const [examPreset, setExamPreset] = useState<ExamPreset | null>(null);
   const [examDialogOpen, setExamDialogOpen] = useState(false);
   const [generating, setGenerating] = useState<GenState | null>(null);
+  const [askAnalytics, setAskAnalytics] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
+  const [analyticsAvailable, setAnalyticsAvailable] = useState(false);
+  const chooseAnalytics = useCallback((on: boolean) => {
+    setAnalytics(on);
+    setAskAnalytics(false);
+    void window.exee.updateSettings({ analytics: on });
+  }, []);
   const [running, setRunning] = useState<Running | null>(null);
   const [reviewing, setReviewing] = useState<Reviewing | null>(null);
   const [grading, setGrading] = useState(false);
@@ -93,6 +101,9 @@ export function App() {
         if (settings.data.model) setModel(settings.data.model);
         setCourseId(settings.data.currentCourseId);
         setPlanDone(settings.data.planDone ?? {});
+        setAskAnalytics(Boolean(settings.data.analyticsAvailable) && settings.data.analytics === undefined);
+        setAnalytics(settings.data.analytics === true);
+        setAnalyticsAvailable(Boolean(settings.data.analyticsAvailable));
       }
       setBooted(true);
     })();
@@ -440,6 +451,8 @@ export function App() {
           onSignIn={signIn}
           onDisconnect={disconnect}
           onOpenUsage={openUsage}
+          analytics={analyticsAvailable ? analytics : null}
+          onAnalyticsChange={chooseAnalytics}
         />
       );
     }
@@ -606,6 +619,25 @@ export function App() {
           uploadMaterial();
         }}
       />
+
+      <Modal open={askAnalytics} onClose={() => chooseAnalytics(false)} width={500} title="Help improve Exee AI?" sub="You can change this any time in Settings.">
+        <p style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-2)" }}>
+          Exee AI can send anonymous usage counts, such as that an exam was generated and how many questions it had, so we can
+          see what students use and fix what they don&rsquo;t.
+        </p>
+        <p style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-2)" }}>
+          It never sends your name, email, course names, files, questions, answers or scores, and nothing from your ChatGPT
+          account.
+        </p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+          <button className="btn btn-ghost" onClick={() => chooseAnalytics(false)}>
+            No thanks
+          </button>
+          <button className="btn btn-primary" onClick={() => chooseAnalytics(true)}>
+            Share anonymous counts
+          </button>
+        </div>
+      </Modal>
     </AppShell>
   );
 }

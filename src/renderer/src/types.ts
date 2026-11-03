@@ -141,6 +141,10 @@ export interface Settings {
   lastActiveDay?: string;
   currentCourseId?: string;
   planDone?: Record<string, boolean>;
+  /** Anonymous usage counts: true = opted in, false = declined, unset = not asked yet. */
+  analytics?: boolean;
+  /** Read-only: whether this build can send usage counts at all. */
+  analyticsAvailable?: boolean;
 }
 
 export interface Card {

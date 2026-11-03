@@ -43,7 +43,11 @@ jobs:
       # postinstall builds the vendored Sign in with ChatGPT DevKit workspaces.
       - run: npm ci
 
+      # The Aptabase key comes from a repository secret so it stays out of the
+      # source. Without the secret the build simply ships with analytics off.
       - run: npm run build
+        env:
+          MAIN_VITE_APTABASE_KEY: ${{ secrets.APTABASE_APP_KEY }}
 
       - name: Package
         run: npx electron-builder ${{ matrix.platform }} --publish never

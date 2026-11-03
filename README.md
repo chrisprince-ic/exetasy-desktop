@@ -54,6 +54,22 @@ GitHub Actions and publishes the release:
 git tag v0.2.0 && git push origin v0.2.0
 ```
 
+## Analytics
+
+Exee AI can send anonymous usage counts to [Aptabase](https://aptabase.com), but
+only after the student agrees on first launch (and they can turn it off in
+Settings). Events are counts and yes/no flags such as `exam_generated` with the
+number of questions; never names, files, questions, answers or scores. The
+sender is `src/main/analytics.ts`.
+
+The app key is supplied at build time, never committed:
+
+- Locally: copy `.env.example` to `.env.local` and set `MAIN_VITE_APTABASE_KEY`.
+- Releases: the `APTABASE_APP_KEY` repository secret (Settings → Secrets and
+  variables → Actions).
+
+A build without a key sends nothing and never shows the question.
+
 ## Getting started
 
 Requires Node 22+.

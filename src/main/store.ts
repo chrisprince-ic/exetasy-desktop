@@ -98,6 +98,8 @@ export interface Settings {
   currentCourseId?: string;
   /** Study-plan sessions the student has ticked off, keyed "courseId:YYYY-MM-DD:index". */
   planDone?: Record<string, boolean>;
+  /** Anonymous usage counts: true = opted in, false = declined, unset = not asked yet. */
+  analytics?: boolean;
 }
 
 export interface Deck {

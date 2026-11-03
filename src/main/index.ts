@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { app, BrowserWindow, shell } from "electron";
+import { track } from "./analytics.js";
 import { registerIpc } from "./ipc.js";
 import { initStore } from "./store.js";
 
@@ -75,6 +76,7 @@ app.whenReady().then(async () => {
   await initStore();
   registerIpc(() => mainWindow);
   createWindow();
+  track("app_started");
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

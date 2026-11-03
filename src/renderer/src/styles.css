@@ -872,6 +872,11 @@ textarea.field {
   animation: modal 0.24s var(--ease) both;
 }
 
+/* A tall dialog scrolls; its parts keep their size instead of squashing. */
+.sheet > * {
+  flex-shrink: 0;
+}
+
 .toast {
   position: fixed;
   left: 50%;

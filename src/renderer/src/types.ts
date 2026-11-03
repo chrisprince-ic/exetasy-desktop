@@ -77,6 +77,8 @@ export interface Exam {
   title: string;
   questions: ExamQuestion[];
   timeLimit: number;
+  /** "each": answers shown after every question. "end" (default): only after submitting. */
+  feedback?: "each" | "end";
   createdAt: number;
 }
 
@@ -254,6 +256,9 @@ export interface ExeeApi {
     timeLimit: number;
     focusTopics?: string[];
     difficulty?: Difficulty;
+    /** Free-text requests from the student. */
+    instructions?: string;
+    feedback?: "each" | "end";
   }): Promise<Result<GenerateResult>>;
 
   listAttempts(examId?: string): Promise<Result<Attempt[]>>;

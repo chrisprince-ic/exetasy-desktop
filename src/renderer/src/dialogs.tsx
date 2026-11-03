@@ -124,8 +124,14 @@ export interface ExamConfig {
   difficulty: Difficulty;
   written: boolean;
   timed: boolean;
+  /** Reveal answers after each question instead of only at the end. */
+  checkEach: boolean;
+  /** The student's own requests for this exam. */
+  instructions: string;
   title?: string;
 }
+
+const MAX_INSTRUCTIONS = 1000;
 
 export interface ExamPreset {
   materialIds?: string[];
@@ -151,6 +157,7 @@ export function NewExamDialog({
   preset,
   onClose,
   onGenerate,
+  onAddMaterial,
 }: {
   open: boolean;
   course: Course | undefined;
@@ -159,6 +166,8 @@ export function NewExamDialog({
   preset: ExamPreset | null;
   onClose: () => void;
   onGenerate: (config: ExamConfig) => void;
+  /** Leaves the form to add study material. */
+  onAddMaterial: () => void;
 }) {
   const [materials, setMaterials] = useState<MaterialMeta[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
@@ -167,10 +176,14 @@ export function NewExamDialog({
   const [difficulty, setDifficulty] = useState<Difficulty>("exam");
   const [written, setWritten] = useState(false);
   const [timed, setTimed] = useState(true);
+  const [checkEach, setCheckEach] = useState(false);
+  const [instructions, setInstructions] = useState("");
+  const [askNoMaterial, setAskNoMaterial] = useState(false);
 
   useEffect(() => {
     if (!open || !course) return;
     setFocus(preset?.focusTopics ?? []);
+    setAskNoMaterial(false);
     void (async () => {
       const r = await window.exee.listMaterials(course.id);
       if (isFailure(r)) return;
@@ -180,8 +193,58 @@ export function NewExamDialog({
   }, [open, course, preset]);
 
   const toggle = (list: string[], id: string) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]);
-  const ready = selected.length > 0 && count > 0;
+  const ready = count > 0;
   const { sa } = questionMix(count, written);
+
+  const config = (): ExamConfig => ({
+    materialIds: selected,
+    focusTopics: focus,
+    count,
+    difficulty,
+    written,
+    timed,
+    checkEach,
+    instructions: instructions.trim(),
+    title: preset?.title,
+  });
+
+  // With no material the exam can still be written, but it will be generic:
+  // say so and let the student choose.
+  const generateClicked = () => {
+    if (selected.length === 0) setAskNoMaterial(true);
+    else onGenerate(config());
+  };
+
+  if (askNoMaterial) {
+    return (
+      <Modal
+        open={open}
+        onClose={() => setAskNoMaterial(false)}
+        width={480}
+        title="Generate without study material?"
+        sub={
+          materials.length === 0
+            ? "This course has no material yet."
+            : "You haven’t selected any of this course’s material."
+        }
+      >
+        <p style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-2)" }}>
+          Without your slides or notes, questions are written from general knowledge of {course?.name ?? "the subject"}. They
+          won’t follow your lectures, your professor’s emphasis or the terms your course uses, and the readiness score will
+          be less reliable.
+        </p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", flexWrap: "wrap" }}>
+          <button className="btn btn-outline" onClick={() => { setAskNoMaterial(false); onGenerate(config()); }}>
+            Generate anyway
+          </button>
+          <button className="btn btn-primary" onClick={() => { setAskNoMaterial(false); onAddMaterial(); }}>
+            <Icon name="upload_file" size={19} />
+            Add study material
+          </button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -201,8 +264,11 @@ export function NewExamDialog({
           )}
         </span>
         {materials.length === 0 ? (
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--gold-tint)", color: "var(--gold-ink)", font: "400 13.5px/20px var(--font)" }}>
-            This course has no material yet. Add slides or notes under Study materials first — questions written without source material are generic.
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 8, background: "var(--sand-2)", color: "var(--ink-3)", font: "400 13.5px/20px var(--font)" }}>
+            <span style={{ flex: 1 }}>No material in this course yet. Exams written without it are generic.</span>
+            <button type="button" className="btn btn-sm btn-outline" onClick={onAddMaterial}>
+              Add material
+            </button>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 210, overflowY: "auto" }}>
@@ -275,22 +341,30 @@ export function NewExamDialog({
           title="Timed, like the real exam"
           detail={timed ? `${examMinutes(count, written)} minutes · 90 seconds per multiple-choice question` : "No clock — take as long as you need"}
         />
+        <Switch
+          on={checkEach}
+          onChange={setCheckEach}
+          title="Check answers as I go"
+          detail={checkEach ? "Each multiple-choice answer is marked as soon as you check it" : "Answers are revealed after you submit, like the real exam"}
+        />
       </div>
+
+      <Labeled label="Your instructions" hint="optional">
+        <textarea
+          className="field"
+          rows={3}
+          maxLength={MAX_INSTRUCTIONS}
+          value={instructions}
+          onChange={(e) => setInstructions(e.target.value)}
+          placeholder="For example: more calculation questions, include past-paper style essay prompts, skip lecture 3, use SI units."
+          style={{ minHeight: 84 }}
+        />
+      </Labeled>
 
       <button
         className="btn btn-primary btn-lg"
         disabled={!ready}
-        onClick={() =>
-          onGenerate({
-            materialIds: selected,
-            focusTopics: focus,
-            count,
-            difficulty,
-            written,
-            timed,
-            title: preset?.title,
-          })
-        }
+        onClick={generateClicked}
       >
         <Icon name="auto_awesome" size={20} />
         Generate exam

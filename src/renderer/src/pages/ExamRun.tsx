@@ -56,6 +56,8 @@ export function ExamRun({
 }) {
   const questions = exam.questions;
   const timed = exam.timeLimit > 0;
+  /** Exams made before this setting existed reveal answers at the end. */
+  const instant = exam.feedback === "each";
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Answers>(attempt.answers ?? {});
   const [checked, setChecked] = useState<Record<number, boolean>>({});
@@ -118,14 +120,14 @@ export function ExamRun({
 
   const primary = useCallback(() => {
     if (!q) return;
-    if (q.type === "mc" && !checked[q.id]) {
+    if (instant && q.type === "mc" && !checked[q.id]) {
       if (value === undefined) return;
       setChecked((c) => ({ ...c, [q.id]: true }));
       return;
     }
     if (last) setConfirm("submit");
     else goTo(idx + 1);
-  }, [q, checked, value, last, idx, goTo]);
+  }, [q, checked, value, last, idx, goTo, instant]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -171,8 +173,8 @@ export function ExamRun({
 
   const correctNow = q.type === "mc" && isChecked && value === q.correct;
   const lowTime = timed && secs < 300;
-  const btnLabel = q.type === "mc" && !isChecked ? "Check answer" : last ? "Submit for grading" : "Next question";
-  const btnDisabled = q.type === "mc" && !isChecked && value === undefined;
+  const btnLabel = instant && q.type === "mc" && !isChecked ? "Check answer" : last ? "Submit for grading" : "Next question";
+  const btnDisabled = instant && q.type === "mc" && !isChecked && value === undefined;
 
   return (
     <div className="fade" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -324,7 +326,8 @@ export function ExamRun({
           <span style={{ font: "400 13px/18px var(--font)", color: "var(--ink-5)" }}>
             {q.type === "mc" ? (
               <>
-                Press <b style={{ fontWeight: 500, color: "var(--ink-3)" }}>1–4</b> to choose · <b style={{ fontWeight: 500, color: "var(--ink-3)" }}>Enter</b> to {isChecked ? "continue" : "check"}
+                Press <b style={{ fontWeight: 500, color: "var(--ink-3)" }}>1–4</b> to choose · <b style={{ fontWeight: 500, color: "var(--ink-3)" }}>Enter</b> to {instant && !isChecked ? "check" : "continue"}
+                {!instant && " · answers are revealed when you submit"}
               </>
             ) : (
               <>

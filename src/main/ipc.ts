@@ -119,7 +119,7 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
   /* --------------------------- generation ---------------------------- */
   handle(
     "exam:generate",
-    async (input: GenerateExamInput & { title: string }) => {
+    async (input: GenerateExamInput & { title: string; feedback?: "each" | "end" }) => {
       const stats = await generateExam(input, (message) =>
         getWindow()?.webContents.send("exam:progress", message),
       );
@@ -131,6 +131,7 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
         title: input.title,
         questions: stats.questions,
         timeLimit: input.timeLimit,
+        feedback: input.feedback === "each" ? "each" : "end",
       });
 
       return {
@@ -156,7 +157,7 @@ export function registerIpc(getWindow: () => BrowserWindow | undefined): void {
       });
 
       // Anything scored under half marks becomes a flashcard, built locally
-      // from the exam's own answer key — no extra plan usage.
+      // from the exam's own answer key ï¿½ no extra plan usage.
       const byId = new Map(result.perQuestion.map((p) => [p.id, p]));
       const missed = input.questions.flatMap((q) => {
         const graded = byId.get(q.id);

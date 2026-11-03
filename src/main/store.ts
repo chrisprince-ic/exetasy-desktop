@@ -61,6 +61,8 @@ export interface Exam {
   title: string;
   questions: unknown[];
   timeLimit: number;
+  /** When answers are revealed: after each question, or only at the end like a real exam. */
+  feedback?: "each" | "end";
   createdAt: number;
 }
 

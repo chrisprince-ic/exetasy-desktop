@@ -222,7 +222,9 @@ export function App() {
           ? `your notes on ${cfg.focusTopics[0]}`
           : picked.length === 1
             ? picked[0]!.title
-            : `${picked.length || "all"} of your ${course.code || course.name} materials`;
+            : picked.length === 0
+              ? `general knowledge of ${course.code || course.name}`
+              : `${picked.length} of your ${course.code || course.name} materials`;
       const examCount = stats?.exams ?? 0;
       const title =
         cfg.title ??
@@ -250,6 +252,8 @@ export function App() {
         timeLimit: cfg.timed ? examMinutes(cfg.count, cfg.written) : 0,
         focusTopics: cfg.focusTopics,
         difficulty: cfg.difficulty,
+        instructions: cfg.instructions || undefined,
+        feedback: cfg.checkEach ? "each" : "end",
       });
 
       setGenerating(null);
@@ -274,7 +278,7 @@ export function App() {
         go("materials");
         return toast("Add study material to this course first");
       }
-      await generate({ materialIds: ids, focusTopics: [target], count: 6, difficulty: "exam", written: false, timed: true });
+      await generate({ materialIds: ids, focusTopics: [target], count: 6, difficulty: "exam", written: false, timed: true, checkEach: true, instructions: "" });
     },
     [course, weakTopics, needsPlan, generate, openNewExam, go, toast],
   );
@@ -597,6 +601,10 @@ export function App() {
         preset={examPreset}
         onClose={() => setExamDialogOpen(false)}
         onGenerate={(cfg) => void generate(cfg)}
+        onAddMaterial={() => {
+          setExamDialogOpen(false);
+          uploadMaterial();
+        }}
       />
     </AppShell>
   );

@@ -38,10 +38,15 @@ export interface GenerateExamInput {
   saCount: number;
   laCount: number;
   timeLimit: number;
-  /** Restricts the exam to these topics — a "drill" on weak areas. */
+  /** Restricts the exam to these topics ï¿½ a "drill" on weak areas. */
   focusTopics?: string[];
   difficulty?: Difficulty;
+  /** Free-text requests from the student, e.g. "focus on calculations". */
+  instructions?: string;
 }
+
+/** Longest custom instruction passed to the model. */
+const MAX_INSTRUCTIONS = 1000;
 
 export type Difficulty = "foundational" | "exam" | "challenging";
 
@@ -168,6 +173,7 @@ function buildPrompt(
 ): string {
   const total = batch.mc + batch.sa + batch.la;
   const first = offset + 1;
+  const asks = (input.instructions ?? "").trim().slice(0, MAX_INSTRUCTIONS);
 
   return `Course: ${input.courseName}${input.courseCode ? ` (${input.courseCode})` : ""}
 Professor: ${input.professor || "Course Instructor"}
@@ -176,6 +182,7 @@ Difficulty: ${DIFFICULTY_BRIEF[input.difficulty ?? "exam"]}
 ${profile.style ? `Course character: ${profile.style}` : ""}
 ${batch.topics.length ? `Focus this batch on: ${batch.topics.join(", ")}` : ""}
 ${profile.keyTerms.length ? `Key terms in this course: ${profile.keyTerms.join(", ")}` : ""}
+${asks ? `The student's requests for this exam (follow them unless they conflict with the counts, format or rules below):\n"""\n${asks}\n"""` : ""}
 
 Questions needed in this batch:
   - Multiple Choice: ${batch.mc} (2 marks each)
@@ -200,7 +207,11 @@ Rules:
 - Produce exactly ${batch.mc} "mc", then ${batch.sa} "sa", then ${batch.la} "la" questions.
 - Use the field name "text" for every question, never "question".
 - "mc" needs exactly 4 options; "correct" is a 0-indexed integer.
-- Base every question on the source material above, not on general knowledge.
+${
+    excerpt
+      ? "- Base every question on the source material above, not on general knowledge."
+      : "- No source material was supplied: write standard university-level questions for this course."
+  }
 - Set "topic" on every question to the single topic it tests, chosen from the
   focus list above where one fits. This drives the student's readiness score.
 - University level. Do not repeat a concept you have already tested.`;

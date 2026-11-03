@@ -51,7 +51,7 @@ Bump `version` in `package.json`, commit, then push a matching tag. The
 GitHub Actions and publishes the release:
 
 ```bash
-git tag v0.1.0 && git push origin v0.1.0
+git tag v0.1.1 && git push origin v0.1.1
 ```
 
 ## Getting started

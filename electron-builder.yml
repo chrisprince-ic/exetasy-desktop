@@ -1,0 +1,92 @@
+# Packaging config for the distributable Exetasy build.
+#
+# Two obligations this file has to honour:
+#
+#   1. The vendored Sign in with ChatGPT DevKit is noncommercial-licensed, and
+#      Section 4(a) requires recipients get a copy of that licence. The DevKit's
+#      own build already copies LICENSE and THIRD_PARTY_NOTICES into its dist/,
+#      which ships inside the asar; `extraResources` additionally places the
+#      project NOTICE and the DevKit licence where a user can actually find them.
+#
+#   2. The app must stay per-user. A per-machine install would need elevation,
+#      and the credential store is per-user anyway.
+
+appId: com.exetasy.app
+productName: Exetasy
+copyright: Copyright © 2026 Christian Ikirezi
+
+directories:
+  output: release
+  buildResources: build
+
+# `out` is the electron-vite bundle. node_modules is pruned to production
+# dependencies automatically, which is now just @siwc/local and its deps.
+files:
+  - out/**
+  - package.json
+  - "!**/*.map"
+
+extraResources:
+  - from: NOTICE
+    to: NOTICE.txt
+  - from: LICENSE
+    to: LICENSE.txt
+  - from: vendor/LICENSE
+    to: third-party/sign-in-with-chatgpt-devkit-LICENSE.txt
+  - from: vendor/THIRD_PARTY_NOTICES.md
+    to: third-party/THIRD_PARTY_NOTICES.md
+
+asar: true
+# Keep the build reproducible-ish and skip the rebuild step: there are no
+# native modules, so electron-builder has nothing to compile.
+npmRebuild: false
+
+# Artifact names carry no version, so the landing page can link straight to
+# https://github.com/chrisprince-ic/exetasy-desktop/releases/latest/download/<file>.
+publish:
+  provider: github
+  owner: chrisprince-ic
+  repo: exetasy-desktop
+  releaseType: release
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  icon: build/icon.ico
+  # Unsigned. SmartScreen will warn until the binary builds reputation or a
+  # code-signing certificate is added here.
+  artifactName: ${productName}-Setup-${arch}.${ext}
+
+portable:
+  artifactName: ${productName}-Portable-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Exetasy
+  deleteAppDataOnUninstall: false
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+
+mac:
+  target:
+    - target: dmg
+      arch: [universal]
+  # Unsigned and not notarised: users right-click -> Open on first launch.
+  identity: null
+  artifactName: ${productName}-mac-${arch}.${ext}
+  icon: build/icon.png
+  category: public.app-category.education
+
+linux:
+  target: [AppImage]
+  icon: build/icon.png
+  category: Education

@@ -1,0 +1,46 @@
+Exee AI / Exetasy
+Required Notice: Copyright Christian Ikirezi (https://github.com/chrisprince-ic)
+
+This project's own source code is licensed under the PolyForm Noncommercial
+License 1.0.0. See LICENSE.
+
+================================================================================
+BUNDLED THIRD-PARTY COMPONENTS
+================================================================================
+
+The following components are owned by third parties, retain their own licenses,
+and are NOT covered by this project's LICENSE.
+
+--------------------------------------------------------------------------------
+Sign in with ChatGPT DevKit
+--------------------------------------------------------------------------------
+
+Copyright 2026 OpenAI
+
+Licensed under the Sign-in with ChatGPT DevKit Noncommercial License v1.0.
+
+  Source:         https://github.com/openai/sign-in-with-chatgpt-devkit
+  Pinned commit:  0a36fefeb913055c8c7a1a29b63d82b96b2e841a
+  Bundled at:     vendor/
+  License text:   vendor/LICENSE
+  Notices:        vendor/THIRD_PARTY_NOTICES.md
+  Provenance:     vendor/README.md
+
+Modifications: none. All files are verbatim copies of the pinned commit.
+
+Because this license permits use solely for noncommercial purposes, Exee AI as a
+whole is a noncommercial project: it has no paid tier, no subscription, and
+nothing is sold.
+
+The DevKit license grants no rights to OpenAI names, trademarks, logos, or
+branded visual assets. OpenAI trademarks and the "Sign in with ChatGPT" /
+"Continue with ChatGPT" branding remain subject to the OpenAI brand guidelines
+at https://openai.com/brand/.
+
+The DevKit license also grants no access to ChatGPT or the OpenAI API. Use of a
+ChatGPT plan through this application is governed separately by the Sign in with
+ChatGPT Terms at https://openai.com/policies/sign-in-with-chatgpt-terms/.
+
+Transitive dependencies of the DevKit packages (including jose, proper-lockfile,
+and the Apache-2.0 licensed openai SDK) retain their own licenses; see the
+bundled THIRD_PARTY_NOTICES.md.

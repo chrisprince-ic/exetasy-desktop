@@ -51,12 +51,12 @@ export function Plan({
 
   const top =
     day.offset === 0
-      ? "TODAY"
+      ? "Today"
       : day.isExamDay
-        ? `${examName.toUpperCase()} DAY`
+        ? `${examName} day`
         : examDay
-          ? `${examDay.offset - day.offset} DAY${examDay.offset - day.offset === 1 ? "" : "S"} BEFORE THE ${examName.toUpperCase()}`
-          : `IN ${day.offset} DAY${day.offset === 1 ? "" : "S"}`;
+          ? `${examDay.offset - day.offset} day${examDay.offset - day.offset === 1 ? "" : "s"} before the ${examName.toLowerCase()}`
+          : `In ${day.offset} day${day.offset === 1 ? "" : "s"}`;
 
   return (
     <div className="page" style={{ maxWidth: 1100, gap: 22 }}>
@@ -70,7 +70,7 @@ export function Plan({
               style={{
                 flex: "0 0 64px",
                 height: 88,
-                borderRadius: 16,
+                borderRadius: 8,
                 border: `1px solid ${on ? "var(--navy)" : d.isExamDay ? "rgba(142,44,58,.3)" : "var(--line)"}`,
                 background: on ? "var(--navy)" : d.isExamDay ? "var(--wine-tint)" : "var(--paper)",
                 color: on ? "var(--on-navy)" : d.isExamDay ? "var(--wine)" : "var(--ink)",
@@ -82,8 +82,8 @@ export function Plan({
                 transition: "all .2s var(--ease)",
               }}
             >
-              <span style={{ font: "500 10.5px/1 var(--font)", letterSpacing: ".08em", opacity: 0.8 }}>{i === 0 ? "TODAY" : WD[d.date.getDay()]}</span>
-              <span style={{ font: "400 26px/1 var(--font)" }}>{d.date.getDate()}</span>
+              <span style={{ font: "500 11.5px/1 var(--font)", opacity: 0.85 }}>{i === 0 ? "Today" : WD[d.date.getDay()]}</span>
+              <span style={{ font: "500 24px/1 var(--serif)", fontVariantNumeric: "tabular-nums" }}>{d.date.getDate()}</span>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: d.isExamDay ? "var(--wine)" : on ? "var(--gold)" : "var(--gold-deep)" }} />
             </button>
           );
@@ -93,7 +93,7 @@ export function Plan({
       <div className="row">
         <div key={day.iso} className="card rise" style={{ flex: "1.5 1 420px", padding: 28, display: "flex", flexDirection: "column", gap: 12 }}>
           <span className="eyebrow" style={{ letterSpacing: ".1em" }}>{top}</span>
-          <span style={{ font: "400 30px/1.1 var(--font)", marginBottom: 8 }}>{longDate(day.date)}</span>
+          <span style={{ font: "500 28px/1.15 var(--serif)", letterSpacing: "-.015em", marginBottom: 8 }}>{longDate(day.date)}</span>
           {day.sessions.map((s, j) => {
             const key = doneKey(course.id, day.iso, j);
             const isDone = Boolean(done[key]);
@@ -106,7 +106,7 @@ export function Plan({
                   alignItems: "center",
                   gap: 16,
                   padding: 16,
-                  borderRadius: 14,
+                  borderRadius: 8,
                   border: "1px solid var(--line)",
                   background: isDone ? "var(--hover)" : "var(--paper)",
                   animation: `rise .4s ${j * 0.06}s both`,
@@ -136,9 +136,9 @@ export function Plan({
           })}
         </div>
 
-        <div className="card-navy rise" style={{ flex: "1 1 280px", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column", gap: 14, alignSelf: "flex-start", animationDelay: ".14s" }}>
-          <span className="eyebrow" style={{ color: "var(--gold)", letterSpacing: ".1em" }}>How this plan works</span>
-          <span style={{ font: "400 22px/1.3 var(--font)" }}>
+        <div className="card-navy rise" style={{ flex: "1 1 280px", borderRadius: 10, padding: 28, display: "flex", flexDirection: "column", gap: 14, alignSelf: "flex-start", animationDelay: ".14s" }}>
+          <span className="eyebrow" style={{ color: "var(--on-navy-2)" }}>How this plan works</span>
+          <span style={{ font: "500 22px/1.3 var(--serif)" }}>
             {examDay
               ? `Built backwards from ${MONTHS[examDay.date.getMonth()]} ${examDay.date.getDate()}, weighted toward your weakest topics.`
               : "A rolling week, weighted toward your weakest topics."}

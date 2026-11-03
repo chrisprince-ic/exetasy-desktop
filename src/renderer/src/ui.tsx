@@ -1,7 +1,7 @@
 /* ============================================================
-   EXETASY — UI primitives
+   EXEE AI — UI primitives
    The small set of pieces every page shares, styled after
-   "Exetasy redesign prototype (3)". Most styling lives in
+   the Exee AI website. Most styling lives in
    styles.css; these components only add behaviour and props.
    ============================================================ */
 import {
@@ -44,30 +44,18 @@ export function Icon({
 }
 
 /* ---------------- Logo ---------------- */
+/** The wordmark, or with text={false} the mark: an examiner's mark box with a serif e. */
 export function Logo({ size = 36, text = true }: { size?: number; text?: boolean }) {
-  return (
-    <span style={{ display: "flex", alignItems: "center", gap: 11, color: "var(--ink)" }}>
-      <span
-        style={{
-          width: size,
-          height: size,
-          borderRadius: size * 0.28,
-          background: "var(--navy)",
-          color: "var(--gold)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          font: `italic 500 ${Math.round(size * 0.64)}px/1 var(--font)`,
-          flexShrink: 0,
-        }}
-      >
-        E
+  if (text) {
+    return (
+      <span className="wordmark" style={{ fontSize: Math.round(size * 0.66) }} aria-label="Exee AI">
+        Exee AI<i aria-hidden="true">.</i>
       </span>
-      {text && (
-        <span style={{ font: `500 ${Math.round(size * 0.64)}px/1 var(--font)`, letterSpacing: "-.01em" }}>
-          Exetasy
-        </span>
-      )}
+    );
+  }
+  return (
+    <span className="markbox-logo" style={{ width: size, height: size, fontSize: Math.round(size * 0.6) }} aria-label="Exee AI">
+      e
     </span>
   );
 }
@@ -90,8 +78,8 @@ export function Avatar({ name, size = 34 }: { name: string; size?: number }) {
         width: size,
         height: size,
         borderRadius: "50%",
-        background: "var(--wine)",
-        color: "var(--on-navy)",
+        background: "var(--wine-tint)",
+        color: "var(--wine)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -105,14 +93,14 @@ export function Avatar({ name, size = 34 }: { name: string; size?: number }) {
 }
 
 /* ---------------- Score colour ---------------- */
-/** Teal when strong, amber when building, wine when weak — the prototype's scale. */
+/** Green when strong, ink when building, the red pen when weak — the prototype's scale. */
 export const scoreColor = (pct: number) =>
   pct >= 75 ? "var(--teal)" : pct >= 55 ? "var(--amber)" : "var(--wine)";
 
 /* ---------------- Progress bar ---------------- */
 export function Bar({
   value,
-  color = "var(--gold-deep)",
+  color = "var(--ink)",
   height = 5,
   delay = 0,
   track = "var(--sand)",
@@ -156,14 +144,14 @@ export function Ring({
   return (
     <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox="0 0 180 180" style={{ transform: "rotate(-90deg)" }}>
-        <circle cx="90" cy="90" r={RING_R} fill="none" stroke="rgba(244,239,230,.1)" strokeWidth="11" />
+        <circle cx="90" cy="90" r={RING_R} fill="none" stroke="rgba(245,243,238,.12)" strokeWidth="9" />
         <circle
           cx="90"
           cy="90"
           r={RING_R}
           fill="none"
-          stroke="var(--gold)"
-          strokeWidth="11"
+          stroke="var(--on-navy)"
+          strokeWidth="9"
           strokeLinecap="round"
           strokeDasharray={RING_C}
           strokeDashoffset={RING_C * (1 - shown / 100)}
@@ -184,12 +172,12 @@ export function Ring({
         {value === null ? (
           <span style={{ font: `400 ${size * 0.2}px/1 var(--font)`, color: "var(--on-navy-2)" }}>—</span>
         ) : (
-          <span className="tnum" style={{ font: `400 ${size * 0.28}px/1 var(--font)` }}>
+          <span className="tnum" style={{ font: `500 ${Math.round(size * 0.24)}px/1 var(--serif)` }}>
             {shown}
-            <span style={{ fontSize: size * 0.13, color: "var(--gold)" }}>%</span>
+            <span style={{ fontSize: size * 0.12, color: "var(--on-navy-2)" }}>%</span>
           </span>
         )}
-        <span style={{ font: "500 10.5px/14px var(--font)", letterSpacing: ".14em", color: "var(--on-navy-2)" }}>
+        <span style={{ font: "500 12px/16px var(--font)", color: "var(--on-navy-2)" }}>
           {label}
         </span>
         {sub}
@@ -250,7 +238,7 @@ export function Modal({
         {title && (
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <h2 style={{ font: "400 28px/1.1 var(--font)" }}>{title}</h2>
+              <h2 style={{ font: "500 24px/1.15 var(--serif)", letterSpacing: "-.015em" }}>{title}</h2>
               {sub && <p style={{ font: "400 13.5px/19px var(--font)", color: "var(--ink-4)" }}>{sub}</p>}
             </div>
             <button className="icon-btn icon-btn-sm" onClick={onClose} title="Close">
@@ -279,9 +267,9 @@ export function useToast() {
 }
 
 const TOAST_ICON: Record<Tone, [string, string]> = {
-  info: ["info", "var(--gold)"],
-  success: ["check_circle", "var(--gold)"],
-  error: ["error", "#f0a9b2"],
+  info: ["info", "var(--on-navy-2)"],
+  success: ["check_circle", "var(--mint)"],
+  error: ["error", "#f4a29b"],
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -332,22 +320,8 @@ export function EmptyState({
         textAlign: "center",
       }}
     >
-      <span
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: 18,
-          background: "var(--navy)",
-          color: "var(--gold)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          animation: "float 4s ease-in-out infinite",
-        }}
-      >
-        <Icon name={icon} size={28} />
-      </span>
-      <h2 style={{ font: "400 26px/1.15 var(--font)" }}>{title}</h2>
+      <Icon name={icon} size={30} color="var(--ink-5)" />
+      <h2 style={{ font: "500 26px/1.15 var(--serif)", letterSpacing: "-.015em" }}>{title}</h2>
       <p style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-4)", maxWidth: 440 }}>{body}</p>
       {action && <div style={{ marginTop: 6 }}>{action}</div>}
     </div>
@@ -400,7 +374,7 @@ export function Switch({
         justifyContent: "space-between",
         gap: 12,
         padding: "14px 16px",
-        borderRadius: 12,
+        borderRadius: 6,
         border: "1px solid var(--line-2)",
         textAlign: "left",
         width: "100%",

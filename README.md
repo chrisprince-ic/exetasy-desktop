@@ -1,8 +1,8 @@
-# Exetasy — desktop app
+# Exee AI — desktop app
 
 Free, local-first practice exams generated from your own course material.
 
-Exetasy turns lecture slides and notes into realistic practice exams, grades
+Exee AI turns lecture slides and notes into realistic practice exams, grades
 your answers, keeps a spaced-repetition flashcard deck of everything you miss,
 and builds a study plan that works backwards from your exam date. It runs on
 your computer (Windows, macOS, Linux) and uses **your own ChatGPT plan** for
@@ -35,14 +35,14 @@ Get the latest installer from
 
 | Platform | File |
 | --- | --- |
-| Windows (installer) | `Exetasy-Setup-x64.exe` |
-| Windows (portable, no install) | `Exetasy-Portable-x64.exe` |
-| macOS (Intel + Apple Silicon) | `Exetasy-mac-universal.dmg` |
+| Windows (installer) | `Exee-AI-Setup-x64.exe` |
+| Windows (portable, no install) | `Exee-AI-Portable-x64.exe` |
+| macOS (Intel + Apple Silicon) | `Exee-AI-mac-universal.dmg` |
 
 The builds aren't code-signed yet, so the first launch shows a warning:
 
 - **Windows SmartScreen**: click *More info* → *Run anyway*.
-- **macOS Gatekeeper**: right-click Exetasy in Applications → *Open* → *Open*.
+- **macOS Gatekeeper**: right-click Exee AI in Applications → *Open* → *Open*.
 
 ## Releasing
 
@@ -51,7 +51,7 @@ Bump `version` in `package.json`, commit, then push a matching tag. The
 GitHub Actions and publishes the release:
 
 ```bash
-git tag v0.1.1 && git push origin v0.1.1
+git tag v0.2.0 && git push origin v0.2.0
 ```
 
 ## Getting started
@@ -99,14 +99,14 @@ material files). Sign-in tokens are encrypted with the OS credential store.
 
 ## Design
 
-The UI follows *Exetasy redesign prototype (3)*: warm paper surfaces, navy for
+The UI follows *Exee AI redesign prototype (3)*: warm paper surfaces, navy for
 action, gold for progress, wine and teal for misses and hits, Poppins and
 Material Symbols Rounded. Fonts are bundled because the renderer's CSP allows
 no remote origins.
 
 ## Licensing and cost
 
-Exetasy is a **free, noncommercial, open-source project for students**. There
+Exee AI is a **free, noncommercial, open-source project for students**. There
 is no paid tier and nothing is sold.
 
 This app integrates OpenAI's

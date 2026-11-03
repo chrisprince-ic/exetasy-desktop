@@ -76,7 +76,7 @@ export function Overview({
 
   const heroLine =
     pct === null
-      ? "Take a practice exam and Exetasy will start measuring how ready you are, topic by topic."
+      ? "Take a practice exam and Exee AI will start measuring how ready you are, topic by topic."
       : [
           examWhen ? `The ${examName.toLowerCase()} is on ${examWhen}.` : null,
           weakest ? `${weakest} is your weak spot right now.` : null,
@@ -91,15 +91,13 @@ export function Overview({
         {/* hero */}
         <div
           className="card-navy rise"
-          style={{ flex: "1 1 560px", minWidth: 0, borderRadius: 22, padding: 34, display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap", position: "relative", overflow: "hidden" }}
+          style={{ flex: "1 1 560px", minWidth: 0, borderRadius: 10, padding: 34, display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap", position: "relative", overflow: "hidden" }}
         >
-          <div style={{ position: "absolute", right: -60, top: -60, width: 260, height: 260, borderRadius: "50%", border: "1px solid rgba(233,199,127,.14)" }} />
-          <div style={{ position: "absolute", right: -20, top: -20, width: 180, height: 180, borderRadius: "50%", border: "1px solid rgba(233,199,127,.1)" }} />
           <div style={{ flex: "1 1 300px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16, position: "relative" }}>
             <span className="eyebrow" style={{ color: "var(--gold)" }}>
               {course.code || course.name} · {course.examLabel ? `${course.examLabel} readiness` : "Exam readiness"}
             </span>
-            <span className="display" style={{ fontSize: 46, lineHeight: 1.08 }}>
+            <span className="display" style={{ fontSize: 32, lineHeight: 1.12 }}>
               {pct === null ? (
                 <>Let&rsquo;s find your <em style={{ color: "var(--gold)" }}>baseline</em>.</>
               ) : (
@@ -123,7 +121,7 @@ export function Overview({
           <div style={{ margin: "0 auto" }}>
             <Ring
               value={pct}
-              label="READY"
+              label="Ready"
               sub={
                 readiness && pct !== null ? (
                   <span style={{ font: "600 12px/16px var(--font)", color: "var(--mint)" }}>
@@ -204,9 +202,7 @@ export function Overview({
             className="card card-sm lift rise"
             style={{ display: "flex", alignItems: "center", gap: 16, textAlign: "left", animationDelay: `${0.12 + i * 0.05}s` }}
           >
-            <span style={{ width: 48, height: 48, borderRadius: 14, background: q.bg, color: q.fg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Icon name={q.icon} size={24} />
-            </span>
+            <Icon name={q.icon} size={22} color="var(--ink-4)" />
             <span style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, minWidth: 0 }}>
               <span style={{ font: "600 15px/20px var(--font)" }}>{q.title}</span>
               <span style={{ font: "400 13px/18px var(--font)", color: "var(--ink-4)" }}>{q.desc}</span>
@@ -269,7 +265,7 @@ export function Overview({
                     maxWidth: 30,
                     height: Math.max(6, Math.round((w.minutes / maxMinutes) * 110)),
                     borderRadius: "7px 7px 3px 3px",
-                    background: i === 6 ? "var(--navy)" : "#dcd2bf",
+                    background: i === 6 ? "var(--wine)" : "var(--navy)",
                     transformOrigin: "bottom",
                     animation: `grow .8s ${0.3 + i * 0.05}s var(--ease) both`,
                   }}
@@ -306,8 +302,8 @@ export function Overview({
                       flexShrink: 0,
                     }}
                   >
-                    <span style={{ font: "500 20px/1 var(--font)" }}>{String(d.date.getDate()).padStart(2, "0")}</span>
-                    <span style={{ font: "500 9.5px/1 var(--font)", letterSpacing: ".1em" }}>{MONTHS[d.date.getMonth()]!.slice(0, 3).toUpperCase()}</span>
+                    <span className="tnum" style={{ font: "500 21px/1 var(--serif)" }}>{d.date.getDate()}</span>
+                    <span style={{ font: "500 11px/1 var(--font)" }}>{MONTHS[d.date.getMonth()]!.slice(0, 3)}</span>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 3, minWidth: 0 }}>
                     <span style={{ font: "600 14px/19px var(--font)" }}>{s.title}</span>
@@ -321,7 +317,7 @@ export function Overview({
           {!course.examDate && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-start" }}>
               <p style={{ font: "400 13.5px/20px var(--font)", color: "var(--ink-4)" }}>
-                Add your exam date and Exetasy will plan backwards from it.
+                Add your exam date and Exee AI will plan backwards from it.
               </p>
               <button className="btn btn-sm btn-outline" onClick={onEditCourse}>
                 <Icon name="event" size={17} />

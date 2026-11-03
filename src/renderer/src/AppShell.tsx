@@ -1,10 +1,10 @@
 /* ============================================================
-   EXETASY — App shell: sidebar, header and command palette.
-   From "Exetasy redesign prototype (3)/Exetasy.dc.html".
+   EXEE AI — App shell: sidebar, header and command palette.
+   Styled to match the Exee AI website: paper ground, ink, red pen.
 
    One deliberate change from the prototype: the profile row's
    "Free plan / Upgrade" is replaced by the ChatGPT plan status.
-   Exetasy has no paid tier — the Sign in with ChatGPT Terms
+   Exee AI has no paid tier — the Sign in with ChatGPT Terms
    require students to reach their plan "without paying you or
    upgrading to a paid version of your application".
    ============================================================ */
@@ -109,22 +109,22 @@ export function AppShell({
       <aside
         className="drag"
         style={{
-          width: wide ? 252 : 76,
+          width: wide ? 236 : 72,
           flexShrink: 0,
           height: "100vh",
           position: "sticky",
           top: 0,
           display: "flex",
           flexDirection: "column",
-          gap: 22,
-          padding: IS_MAC ? "40px 14px 18px" : "22px 14px 18px",
+          gap: 24,
+          padding: IS_MAC ? "42px 14px 16px" : "22px 14px 16px",
           background: "var(--side)",
           borderRight: "1px solid var(--line)",
           transition: "width .25s var(--ease)",
         }}
       >
-        <button onClick={() => nav("overview")} style={{ padding: "0 6px", alignSelf: "flex-start" }} title="Overview">
-          <Logo size={36} text={wide} />
+        <button onClick={() => nav("overview")} style={{ padding: "0 8px", alignSelf: wide ? "flex-start" : "center", minHeight: 34, display: "flex", alignItems: "center" }} title="Overview">
+          <Logo size={wide ? 36 : 32} text={wide} />
         </button>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -138,7 +138,7 @@ export function AppShell({
                 title={n.label}
                 style={{ justifyContent: wide ? "flex-start" : "center" }}
               >
-                <Icon name={n.icon} size={21} fill={on} />
+                <Icon name={n.icon} size={20} fill={on} color={on ? "var(--ink)" : "var(--ink-4)"} />
                 {wide && <span style={{ flex: 1 }}>{n.label}</span>}
                 {wide && n.id === "flashcards" && dueCards > 0 && <span className="nav-badge">{dueCards}</span>}
               </button>
@@ -157,25 +157,25 @@ export function AppShell({
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 10,
-                padding: 16,
+                gap: 8,
+                padding: 14,
                 width: "100%",
-                borderRadius: 14,
+                borderRadius: 8,
                 background: "var(--paper)",
                 border: "1px solid var(--line)",
                 textAlign: "left",
               }}
             >
-              <span className="eyebrow" style={{ fontSize: 10.5, letterSpacing: ".1em", display: "flex", justifyContent: "space-between" }}>
+              <span className="eyebrow" style={{ display: "flex", justifyContent: "space-between" }}>
                 Current course
                 <Icon name="unfold_more" size={16} />
               </span>
-              <span style={{ font: "500 17px/22px var(--font)" }} className="ellipsis">
+              <span style={{ font: "500 18px/23px var(--serif)", letterSpacing: "-.01em" }} className="ellipsis">
                 {course ? `${course.code ? `${course.code} · ` : ""}${course.name}` : "No course yet"}
               </span>
               <span style={{ display: "flex", justifyContent: "space-between", gap: 8, font: "500 12px/16px var(--font)", color: "var(--ink-3)" }}>
                 <span className="ellipsis">{course ? (countdown ?? "Set an exam date") : "Create one to begin"}</span>
-                {readinessPct !== null && <span>{readinessPct}%</span>}
+                {readinessPct !== null && <span className="tnum">{readinessPct}%</span>}
               </span>
               <Bar value={readinessPct ?? 0} />
             </button>
@@ -256,14 +256,13 @@ export function AppShell({
             display: "flex",
             alignItems: "center",
             gap: 16,
-            padding: "18px 32px",
-            background: "rgba(244,239,230,.88)",
-            backdropFilter: "blur(10px)",
-            borderBottom: "1px solid rgba(28,32,51,.06)",
+            padding: "16px 40px",
+            background: "var(--cream)",
+            borderBottom: "1px solid var(--line)",
           }}
         >
           <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
-            <h1 className="ellipsis" style={{ font: "400 26px/1.25 var(--font)", letterSpacing: "-.01em" }}>
+            <h1 className="ellipsis" style={{ font: "500 27px/1.2 var(--serif)", letterSpacing: "-.02em" }}>
               {title}
             </h1>
             <span className="ellipsis" style={{ font: "400 13px/18px var(--font)", color: "var(--ink-4)" }}>
@@ -277,16 +276,16 @@ export function AppShell({
               display: "flex",
               alignItems: "center",
               gap: 10,
-              height: 40,
-              padding: "0 10px 0 14px",
-              borderRadius: 99,
+              height: 36,
+              padding: "0 8px 0 12px",
+              borderRadius: 6,
               border: "1px solid var(--line)",
               background: "var(--paper)",
               color: "var(--ink-4)",
               font: "400 13.5px/1 var(--font)",
             }}
           >
-            <Icon name="search" size={19} />
+            <Icon name="search" size={18} />
             {wide && <span style={{ minWidth: 150, textAlign: "left" }}>Search or jump to…</span>}
             <span className="kbd">{IS_MAC ? "⌘K" : "Ctrl K"}</span>
           </button>
@@ -297,20 +296,22 @@ export function AppShell({
               display: "flex",
               alignItems: "center",
               gap: 6,
-              height: 40,
-              padding: "0 14px",
-              borderRadius: 99,
-              background: "var(--gold-tint)",
-              color: "var(--gold-ink)",
+              height: 36,
+              padding: "0 12px",
+              borderRadius: 6,
+              background: "var(--paper)",
+              border: "1px solid var(--line)",
+              color: "var(--ink-2)",
               font: "600 13px/1 var(--font)",
+              fontVariantNumeric: "tabular-nums",
             }}
           >
-            <Icon name="local_fire_department" size={19} fill color="var(--gold-deep)" />
+            <Icon name="local_fire_department" size={18} fill color="var(--wine)" />
             {streak}
           </span>
 
           <button className="icon-btn" title="ChatGPT plan usage" onClick={onOpenUsage}>
-            <Icon name="speed" size={22} />
+            <Icon name="speed" size={20} />
           </button>
         </header>
 
@@ -364,17 +365,17 @@ function CourseMenu({
         width: 260,
         zIndex: 40,
         background: "var(--paper)",
-        borderRadius: 16,
+        borderRadius: 8,
         border: "1px solid var(--line)",
         boxShadow: "var(--shadow-pop)",
         padding: 8,
-        animation: "modal .2s var(--ease) both",
+        animation: "modal .18s var(--ease) both",
       }}
     >
       <div style={{ maxHeight: 260, overflowY: "auto" }}>
         {courses.map((c) => (
           <button key={c.id} className="row-btn" style={{ padding: "10px 12px" }} onClick={() => onPick(c.id)}>
-            <Icon name={c.id === currentId ? "radio_button_checked" : "radio_button_unchecked"} size={18} color={c.id === currentId ? "var(--navy)" : "var(--ink-5)"} />
+            <Icon name={c.id === currentId ? "radio_button_checked" : "radio_button_unchecked"} size={18} color={c.id === currentId ? "var(--ink)" : "var(--ink-5)"} />
             <span style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
               <span className="ellipsis" style={{ font: "500 14px/19px var(--font)" }}>{c.name}</span>
               {c.code && <span style={{ font: "400 12px/16px var(--font)", color: "var(--ink-5)" }}>{c.code}</span>}
@@ -422,17 +423,16 @@ function Palette({ items, onClose }: { items: PaletteItem[]; onClose: () => void
   };
 
   return (
-    <div className="scrim" style={{ zIndex: 60, alignItems: "flex-start", paddingTop: "12vh", background: "rgba(28,32,51,.36)", animationDuration: ".15s" }} onClick={onClose}>
+    <div className="scrim" style={{ zIndex: 60, alignItems: "flex-start", paddingTop: "12vh", background: "rgba(20,26,43,.32)", animation: "none" }} onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
           width: "100%",
           maxWidth: 580,
           background: "var(--paper)",
-          borderRadius: 20,
+          borderRadius: 10,
           overflow: "hidden",
-          boxShadow: "0 40px 80px -30px rgba(28,32,51,.55)",
-          animation: "modal .22s var(--ease) both",
+          boxShadow: "var(--shadow-pop)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px 20px", borderBottom: "1px solid var(--line)" }}>
@@ -454,9 +454,9 @@ function Palette({ items, onClose }: { items: PaletteItem[]; onClose: () => void
               }
             }}
             placeholder="Search pages, topics and actions…"
-            style={{ flex: 1, border: 0, outline: 0, background: "transparent", font: "400 17px/24px var(--font)", minWidth: 0 }}
+            style={{ flex: 1, border: 0, outline: 0, background: "transparent", font: "400 16px/24px var(--font)", minWidth: 0 }}
           />
-          <span className="kbd">ESC</span>
+          <span className="kbd">Esc</span>
         </div>
         <div style={{ padding: 8, maxHeight: 380, overflowY: "auto" }}>
           {shown.map((item, i) => (
@@ -465,13 +465,11 @@ function Palette({ items, onClose }: { items: PaletteItem[]; onClose: () => void
               className="row-btn"
               onMouseEnter={() => setActive(i)}
               onClick={() => run(item)}
-              style={{ gap: 14, padding: "11px 12px", background: i === active ? "var(--sand-2)" : undefined }}
+              style={{ gap: 12, padding: "10px 12px", background: i === active ? "var(--hover)" : undefined }}
             >
-              <span style={{ width: 34, height: 34, borderRadius: 10, background: "var(--sand-2)", color: "var(--navy)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon name={item.icon} size={19} />
-              </span>
-              <span style={{ flex: 1, font: "500 14.5px/20px var(--font)" }}>{item.label}</span>
-              <span style={{ font: "500 11px/1 var(--font)", color: "var(--ink-5)" }}>{item.group}</span>
+              <Icon name={item.icon} size={18} color="var(--ink-4)" />
+              <span style={{ flex: 1, font: "500 14px/20px var(--font)" }}>{item.label}</span>
+              <span style={{ font: "500 12px/1 var(--font)", color: "var(--ink-5)" }}>{item.group[0] + item.group.slice(1).toLowerCase()}</span>
             </button>
           ))}
           {shown.length === 0 && (

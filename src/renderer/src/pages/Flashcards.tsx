@@ -156,11 +156,11 @@ export function Flashcards({
           confirming={confirmDelete}
         />
       ) : done ? (
-        <div className="card" style={{ width: "100%", maxWidth: 560, display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "48px 32px", borderRadius: 24, textAlign: "center", animation: "modal .5s both" }}>
+        <div className="card" style={{ width: "100%", maxWidth: 560, display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "48px 32px", borderRadius: 10, textAlign: "center", animation: "modal .5s both" }}>
           <span style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--teal-tint)", color: "var(--teal)", display: "flex", alignItems: "center", justifyContent: "center", animation: "pop .5s .2s both" }}>
             <Icon name="task_alt" size={32} />
           </span>
-          <span style={{ font: "400 34px/1.1 var(--font)" }}>Session complete.</span>
+          <span style={{ font: "500 30px/1.1 var(--serif)", letterSpacing: "-.02em" }}>Session complete.</span>
           <span style={{ font: "400 15px/22px var(--font)", color: "var(--ink-3)" }}>
             {tally.good} good, {tally.hard} hard and {tally.again} again. Cards you missed come back tomorrow; the ones you knew wait longer.
           </span>
@@ -172,16 +172,16 @@ export function Flashcards({
         item && (
           <>
             <div style={{ width: "100%", maxWidth: 640, display: "flex", justifyContent: "space-between", font: "500 12.5px/16px var(--font)", color: "var(--ink-4)" }}>
-              <span>CARD {i + 1} OF {queue.length}{cram ? " · REVIEWING AHEAD" : ""}</span>
+              <span className="tnum">Card {i + 1} of {queue.length}{cram ? " · reviewing ahead" : ""}</span>
               <span style={{ display: "flex", gap: 14 }}>
                 <span style={{ color: "var(--wine)" }}>{tally.again} again</span>
-                <span style={{ color: "var(--gold-ink)" }}>{tally.hard} hard</span>
+                <span style={{ color: "var(--ink-3)" }}>{tally.hard} hard</span>
                 <span style={{ color: "var(--teal)" }}>{tally.good} good</span>
               </span>
             </div>
             <div style={{ position: "relative", width: "100%", maxWidth: 640, height: 370 }}>
-              <div style={{ position: "absolute", left: 28, right: 28, top: 22, bottom: -22, borderRadius: 24, background: "var(--sand-3)" }} />
-              <div style={{ position: "absolute", left: 14, right: 14, top: 11, bottom: -11, borderRadius: 24, background: "var(--side)", border: "1px solid rgba(28,32,51,.06)" }} />
+              <div style={{ position: "absolute", left: 28, right: 28, top: 22, bottom: -22, borderRadius: 10, background: "var(--sand-3)" }} />
+              <div style={{ position: "absolute", left: 14, right: 14, top: 11, bottom: -11, borderRadius: 10, background: "var(--side)", border: "1px solid rgba(28,32,51,.06)" }} />
               <div
                 className="flip-scene"
                 style={{
@@ -191,9 +191,9 @@ export function Flashcards({
                 }}
               >
                 <div className={flipped ? "flip-card flipped" : "flip-card"} style={{ transition: out ? "none" : undefined }} onClick={flip}>
-                  <div className="flip-face" style={{ background: "var(--paper)", border: "1px solid var(--line)", boxShadow: "0 24px 50px -30px rgba(28,32,51,.45)", alignItems: "center", textAlign: "center", gap: 18 }}>
+                  <div className="flip-face" style={{ background: "var(--paper)", border: "1px solid var(--line)", alignItems: "center", textAlign: "center", gap: 18 }}>
                     {item.card.topic && <span className="tag">{item.card.topic}</span>}
-                    <span style={{ font: `400 ${item.card.front.length > 90 ? 22 : item.card.front.length > 40 ? 30 : 44}px/1.2 var(--font)`, letterSpacing: "-.01em", textWrap: "balance" }}>
+                    <span style={{ font: `500 ${item.card.front.length > 90 ? 24 : item.card.front.length > 40 ? 30 : 40}px/1.2 var(--serif)`, letterSpacing: "-.02em", textWrap: "balance" }}>
                       {item.card.front}
                     </span>
                     <span style={{ position: "absolute", bottom: 24, display: "flex", alignItems: "center", gap: 6, font: "400 13px/1 var(--font)", color: "var(--ink-5)" }}>
@@ -202,8 +202,8 @@ export function Flashcards({
                     </span>
                   </div>
                   <div className="flip-face flip-back" style={{ background: "var(--navy)", color: "var(--on-navy)" }}>
-                    <span className="eyebrow ellipsis" style={{ color: "var(--gold)", fontSize: 12 }}>{item.card.front}</span>
-                    <span style={{ font: `400 ${item.card.back.length > 200 ? 18 : 24}px/1.45 var(--font)`, textWrap: "pretty", whiteSpace: "pre-wrap" }}>{item.card.back}</span>
+                    <span className="eyebrow ellipsis" style={{ color: "var(--on-navy-2)" }}>{item.card.front}</span>
+                    <span style={{ font: `400 ${item.card.back.length > 200 ? 19 : 25}px/1.45 var(--serif)`, textWrap: "pretty", whiteSpace: "pre-wrap" }}>{item.card.back}</span>
                   </div>
                 </div>
               </div>
@@ -252,11 +252,11 @@ export function Flashcards({
 function CaughtUp({ deck, onCram, onDelete, confirming }: { deck?: Deck; onCram: () => void; onDelete?: () => void; confirming: boolean }) {
   const next = deck?.cards.length ? Math.min(...deck.cards.map((c) => c.due)) : null;
   return (
-    <div className="card rise" style={{ width: "100%", maxWidth: 560, display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "44px 32px", borderRadius: 24, textAlign: "center" }}>
+    <div className="card rise" style={{ width: "100%", maxWidth: 560, display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "44px 32px", borderRadius: 10, textAlign: "center" }}>
       <span style={{ width: 60, height: 60, borderRadius: "50%", background: "var(--teal-tint)", color: "var(--teal)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <Icon name="done_all" size={30} />
       </span>
-      <span style={{ font: "400 30px/1.1 var(--font)" }}>You&rsquo;re caught up.</span>
+      <span style={{ font: "500 28px/1.1 var(--serif)", letterSpacing: "-.02em" }}>You&rsquo;re caught up.</span>
       <span style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-4)", maxWidth: 400 }}>
         {deck
           ? `Nothing in ${deck.title} is due${next ? ` until ${new Date(next).toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}` : ""}. Spacing reviews out is what makes them stick.`

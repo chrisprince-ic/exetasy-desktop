@@ -1,4 +1,4 @@
-# Packaging config for the distributable Exetasy build.
+# Packaging config for the distributable Exee AI build.
 #
 # Two obligations this file has to honour:
 #
@@ -11,8 +11,10 @@
 #   2. The app must stay per-user. A per-machine install would need elevation,
 #      and the credential store is per-user anyway.
 
+# Kept from when the app was called Exetasy, so new versions upgrade old
+# installs in place instead of installing alongside them.
 appId: com.exetasy.app
-productName: Exetasy
+productName: Exee AI
 copyright: Copyright © 2026 Christian Ikirezi
 
 directories:
@@ -58,10 +60,10 @@ win:
   icon: build/icon.ico
   # Unsigned. SmartScreen will warn until the binary builds reputation or a
   # code-signing certificate is added here.
-  artifactName: ${productName}-Setup-${arch}.${ext}
+  artifactName: Exee-AI-Setup-${arch}.${ext}
 
 portable:
-  artifactName: ${productName}-Portable-${arch}.${ext}
+  artifactName: Exee-AI-Portable-${arch}.${ext}
 
 nsis:
   oneClick: false
@@ -70,7 +72,7 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: Exetasy
+  shortcutName: Exee AI
   deleteAppDataOnUninstall: false
   installerIcon: build/icon.ico
   uninstallerIcon: build/icon.ico
@@ -82,7 +84,7 @@ mac:
       arch: [universal]
   # Unsigned and not notarised: users right-click -> Open on first launch.
   identity: null
-  artifactName: ${productName}-mac-${arch}.${ext}
+  artifactName: Exee-AI-mac-${arch}.${ext}
   icon: build/icon.png
   category: public.app-category.education
 

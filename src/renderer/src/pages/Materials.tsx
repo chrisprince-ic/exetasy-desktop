@@ -144,13 +144,13 @@ export function Materials({
         onClick={() => void importFiles()}
         disabled={Boolean(work)}
         className="dropzone rise"
-        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 18, flexWrap: "wrap", padding: 34 }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 18, padding: "26px 28px" }}
       >
-        <span style={{ width: 56, height: 56, borderRadius: 18, background: "var(--navy)", color: "var(--gold)", display: "flex", alignItems: "center", justifyContent: "center", animation: "float 4s ease-in-out infinite" }}>
+        <span style={{ display: "flex", color: "var(--ink-4)" }}>
           <Icon name="upload_file" size={28} />
         </span>
         <span style={{ display: "flex", flexDirection: "column", gap: 4, textAlign: "left" }}>
-          <span style={{ font: "500 21px/26px var(--font)" }}>Add slides, PDFs or notes</span>
+          <span style={{ font: "500 21px/26px var(--serif)" }}>Add slides, PDFs or notes</span>
           <span style={{ font: "400 13.5px/19px var(--font)", color: "var(--ink-4)" }}>
             Read and stored on your computer — scanned pages too, with on-device OCR. Only the excerpts an exam needs go to ChatGPT.
           </span>
@@ -170,7 +170,7 @@ export function Materials({
 
       {topics.length > 0 && (
         <div className="card card-sm rise" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="eyebrow">Topics Exetasy found in this course</span>
+          <span className="eyebrow">Topics Exee AI found in this course</span>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {topics.map((t) => (
               <span key={t} className="chip">{t}</span>
@@ -184,23 +184,23 @@ export function Materials({
       ) : (
         <div className="grid-auto" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))" }}>
           {work && (
-            <div className="card card-sm rise" style={{ display: "flex", flexDirection: "column", gap: 14, borderRadius: 20 }}>
-              <MaterialHead kind="pdf" title={work.title} meta="READING…" />
+            <div className="card card-sm rise" style={{ display: "flex", flexDirection: "column", gap: 14, borderRadius: 10 }}>
+              <MaterialHead kind="pdf" title={work.title} meta="Reading…" />
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div className="track"><span className="shimmer" style={{ width: "100%", background: "linear-gradient(90deg,#e3c78a 0,var(--gold-deep) 50%,#e3c78a 100%)", backgroundSize: "960px 100%" }} /></div>
+                <div className="track"><span className="shimmer" style={{ width: "100%" }} /></div>
                 <span style={{ font: "500 12px/16px var(--font)", color: "var(--gold-ink)" }}>{work.status}</span>
                 <span style={{ font: "400 12px/16px var(--font)", color: "var(--ink-5)" }}>Runs on your computer. Uses none of your ChatGPT plan.</span>
               </div>
             </div>
           )}
           {materials.map((m, i) => (
-            <div key={m.id} className="card card-sm lift rise" style={{ display: "flex", flexDirection: "column", gap: 14, borderRadius: 20, animationDelay: `${0.05 + i * 0.04}s` }}>
+            <div key={m.id} className="card card-sm lift rise" style={{ display: "flex", flexDirection: "column", gap: 14, borderRadius: 10, animationDelay: `${0.05 + i * 0.04}s` }}>
               <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <MaterialHead
                     kind={m.kind}
                     title={m.title}
-                    meta={`${Math.max(1, Math.round(m.chars / CHARS_PER_PAGE))} PAGE${m.chars > CHARS_PER_PAGE * 1.5 ? "S" : ""} · ${shortDate(m.createdAt).toUpperCase()}`}
+                    meta={`${Math.max(1, Math.round(m.chars / CHARS_PER_PAGE))} page${m.chars > CHARS_PER_PAGE * 1.5 ? "s" : ""} · ${shortDate(m.createdAt)}`}
                   />
                 </div>
                 <button className="icon-btn icon-btn-sm" title="Remove material" onClick={() => setConfirm(confirm === m.id ? null : m.id)}>

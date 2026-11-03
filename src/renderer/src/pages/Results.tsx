@@ -62,7 +62,7 @@ export function Results({
           <span className="eyebrow" style={{ color: "var(--teal)" }}>
             Exam complete{secs !== null ? ` · ${Math.floor(secs / 60)}M ${secs % 60}S` : ""}
           </span>
-          <span className="display" style={{ fontSize: 44, lineHeight: 1.05 }}>
+          <span className="display" style={{ fontSize: 32, lineHeight: 1.1 }}>
             {pct >= 70 ? "Strong work." : pct >= 45 ? "Good effort — the gaps are clear now." : "A useful baseline."}
           </span>
           <span style={{ font: "400 15.5px/23px var(--font)", color: "var(--ink-3)", maxWidth: 520, textWrap: "pretty" }}>
@@ -77,10 +77,10 @@ export function Results({
           </div>
         </div>
 
-        <div className="card-navy rise" style={{ flex: "1 1 300px", borderRadius: 22, padding: 30, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, animationDelay: ".1s" }}>
+        <div className="card-navy rise" style={{ flex: "1 1 300px", borderRadius: 10, padding: 30, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, animationDelay: ".1s" }}>
           {fresh ? (
             <>
-              <Ring value={ring} size={170} label="READINESS" />
+              <Ring value={ring} size={170} label="Readiness" />
               {delta !== null && (
                 <span
                   style={{
@@ -99,7 +99,7 @@ export function Results({
               {delta === null && ring !== null && <span style={{ font: "500 13px/1 var(--font)", color: "var(--on-navy-2)" }}>Your first measured score</span>}
             </>
           ) : (
-            <Ring value={pct} size={170} label="SCORE" />
+            <Ring value={pct} size={170} label="Score" />
           )}
         </div>
       </div>

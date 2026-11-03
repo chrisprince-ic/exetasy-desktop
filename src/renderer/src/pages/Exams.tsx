@@ -59,17 +59,17 @@ export function Exams({
             alignItems: "center",
             gap: 24,
             padding: "26px 28px",
-            borderRadius: 22,
-            background: "var(--gold-tint)",
-            border: "1px solid rgba(200,151,58,.3)",
+            borderRadius: 10,
+            background: "var(--paper)",
+            border: "1px solid var(--line-2)",
           }}
         >
-          <span style={{ width: 52, height: 52, borderRadius: 16, background: "var(--gold-deep)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", animation: "float 4s ease-in-out infinite" }}>
+          <span style={{ display: "flex", color: "var(--wine)" }}>
             <Icon name="target" size={26} />
           </span>
           <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: 4 }}>
-            <span className="eyebrow" style={{ color: "var(--gold-ink)" }}>Recommended</span>
-            <span style={{ font: "500 22px/28px var(--font)" }}>
+            <span className="eyebrow">Recommended next</span>
+            <span style={{ font: "500 22px/28px var(--serif)", letterSpacing: "-.01em" }}>
               {weakest.topic} is at {Math.round(weakest.mastery)}%. A 6&#8209;question drill takes about 9 minutes.
             </span>
           </div>
@@ -102,7 +102,7 @@ export function Exams({
             <div
               key={exam.id}
               className="card card-sm lift rise"
-              style={{ minHeight: 220, display: "flex", flexDirection: "column", gap: 14, padding: 22, borderRadius: 20, animationDelay: `${0.08 + i * 0.05}s` }}
+              style={{ minHeight: 220, display: "flex", flexDirection: "column", gap: 14, padding: 22, borderRadius: 10, animationDelay: `${0.08 + i * 0.05}s` }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
@@ -112,7 +112,7 @@ export function Exams({
                   </span>
                 </div>
                 {exam.id === newestId && !result ? (
-                  <span className="chip chip-teal" style={{ font: "600 10.5px/1 var(--font)", padding: "5px 8px" }}>NEW</span>
+                  <span className="chip chip-teal">New</span>
                 ) : (
                   <button className="icon-btn icon-btn-sm" title="Delete exam" onClick={() => setConfirm(confirm === exam.id ? null : exam.id)}>
                     <Icon name="more_horiz" size={20} />
@@ -131,7 +131,7 @@ export function Exams({
               ) : (
                 <>
                   <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12 }}>
-                    <span style={{ font: "400 48px/1 var(--font)", color }}>
+                    <span className="tnum" style={{ font: "500 36px/1 var(--serif)", color }}>
                       {pct === null ? "—" : pct}
                       {pct !== null && <span style={{ fontSize: 22 }}>%</span>}
                     </span>

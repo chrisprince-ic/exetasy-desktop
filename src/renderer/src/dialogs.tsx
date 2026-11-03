@@ -1,5 +1,5 @@
 /* ============================================================
-   EXETASY — shared dialogs
+   EXEE AI — shared dialogs
    Course details (create / edit, including the exam date the
    study plan counts down to) and the "New practice exam" sheet.
    ============================================================ */

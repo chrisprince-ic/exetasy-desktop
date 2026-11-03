@@ -1,5 +1,5 @@
 /* ============================================================
-   EXETASY — "Building your exam"
+   EXEE AI — "Building your exam"
    The steps track the main process's real progress messages
    (see main/generate.ts); nothing here is a simulated timer
    except the gentle creep inside the current step.
@@ -51,12 +51,12 @@ export function Generating({ source, title, count, progress }: { source: string;
       <div className="rise" style={{ width: "100%", maxWidth: 580, display: "flex", flexDirection: "column", gap: 28 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <span className="eyebrow" style={{ color: "var(--wine)" }}>Building your exam</span>
-          <span className="display" style={{ fontSize: 36, lineHeight: 1.12 }}>
+          <span className="display" style={{ fontSize: 30, lineHeight: 1.15 }}>
             Reading <em>{source}</em> and writing questions in your professor&rsquo;s style.
           </span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 4, background: "var(--paper)", borderRadius: 18, border: "1px solid var(--line)", padding: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, background: "var(--paper)", borderRadius: 10, border: "1px solid var(--line)", padding: 10 }}>
           {STEPS.map((label, i) => {
             const done = i < step;
             const active = i === step;
@@ -90,7 +90,7 @@ export function Generating({ source, title, count, progress }: { source: string;
           </span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: 22, borderRadius: 18, background: "var(--paper)", border: "1px solid rgba(28,32,51,.06)", opacity: 0.8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: 22, borderRadius: 10, background: "var(--paper)", border: "1px solid rgba(28,32,51,.06)", opacity: 0.8 }}>
           <div className="shimmer" style={{ height: 12, width: "30%" }} />
           <div className="shimmer" style={{ height: 18, width: "88%" }} />
           <div className="shimmer" style={{ height: 18, width: "64%" }} />

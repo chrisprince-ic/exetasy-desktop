@@ -1,7 +1,7 @@
 # Builds the Windows and macOS installers and publishes them to a GitHub
 # Release whenever a version tag (v*) is pushed.
 #
-#   git tag v0.1.1 && git push origin v0.1.1
+#   git tag v0.2.0 && git push origin v0.2.0
 #
 # Remember to bump "version" in package.json to match the tag first.
 #
@@ -76,9 +76,9 @@ jobs:
           body: |
             ## Download
 
-            - **Windows:** `Exetasy-Setup-x64.exe` (installer) or `Exetasy-Portable-x64.exe` (no install)
-            - **macOS (Intel + Apple Silicon):** `Exetasy-mac-universal.dmg`
+            - **Windows:** `Exee-AI-Setup-x64.exe` (installer) or `Exee-AI-Portable-x64.exe` (no install)
+            - **macOS (Intel + Apple Silicon):** `Exee-AI-mac-universal.dmg`
 
             These builds aren't code-signed yet, so the first launch shows a warning:
             - **Windows SmartScreen:** *More info* → *Run anyway*
-            - **macOS:** right-click Exetasy in Applications → *Open* → *Open*
+            - **macOS:** right-click Exee AI in Applications → *Open* → *Open*

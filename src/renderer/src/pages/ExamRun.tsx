@@ -1,6 +1,6 @@
 /* ============================================================
-   EXETASY — Exam run
-   From the prototype's EXAM screen. Multiple choice is checked
+   EXEE AI — Exam run
+   The question is set on an exam sheet and marked in red pen. Multiple choice is checked
    instantly against the answer key on this machine (no plan
    usage); written answers are graded by the model on submit.
 
@@ -9,6 +9,30 @@
    ============================================================ */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Icon, IS_MAC, Modal } from "../ui";
+
+/** Red-pen marks drawn over a checked option. */
+function PenRing() {
+  return (
+    <svg className="pen pen-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true">
+      <path vectorEffect="non-scaling-stroke" d="M10 58 C 4 26, 52 6, 104 7 S 197 24, 194 54 S 148 96, 90 94 S 4 86, 14 38" />
+    </svg>
+  );
+}
+function PenTick() {
+  return (
+    <svg className="pen pen-mark" viewBox="0 0 26 26" aria-hidden="true">
+      <path d="M3 14 L10 22 L24 3" />
+    </svg>
+  );
+}
+function PenCross() {
+  return (
+    <svg className="pen pen-mark" viewBox="0 0 26 26" aria-hidden="true">
+      <path d="M4 4 L22 22" />
+      <path d="M22 4 L4 22" />
+    </svg>
+  );
+}
 import type { Attempt, Exam, ExamQuestion } from "../types";
 
 type Answers = Record<string, string | number>;
@@ -125,7 +149,7 @@ export function ExamRun({
         <div className="rise" style={{ maxWidth: 480, display: "flex", flexDirection: "column", alignItems: "center", gap: 18, textAlign: "center" }}>
           <span className="spinner" style={{ width: 34, height: 34, borderWidth: 3 }} />
           <span className="eyebrow" style={{ color: "var(--wine)" }}>Grading</span>
-          <span className="display" style={{ fontSize: 32, lineHeight: 1.15 }}>Marking your answers like your professor would.</span>
+          <span className="display" style={{ fontSize: 28, lineHeight: 1.2 }}>Marking your answers like your professor would.</span>
           <span style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-4)" }}>
             {progress || "Working through your written answers…"} Multiple choice was marked on your computer and used none of your plan.
           </span>
@@ -163,18 +187,17 @@ export function ExamRun({
           alignItems: "center",
           gap: 20,
           padding: IS_MAC ? "16px 28px 16px 92px" : "16px 28px",
-          background: "rgba(244,239,230,.92)",
-          backdropFilter: "blur(10px)",
-          borderBottom: "1px solid rgba(28,32,51,.06)",
+          background: "var(--cream)",
+          borderBottom: "1px solid var(--line)",
         }}
       >
         <button className="icon-btn" title="Exit exam" onClick={() => setConfirm("exit")}>
           <Icon name="close" size={22} />
         </button>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, maxWidth: 280 }}>
-          <span className="ellipsis" style={{ font: "500 17px/22px var(--font)" }}>{exam.title}</span>
-          <span style={{ font: "500 11.5px/16px var(--font)", color: "var(--ink-5)" }}>
-            QUESTION {idx + 1} OF {questions.length}
+          <span className="ellipsis" style={{ font: "500 18px/23px var(--serif)", letterSpacing: "-.01em" }}>{exam.title}</span>
+          <span className="tnum" style={{ font: "500 12.5px/17px var(--font)", color: "var(--ink-4)" }}>
+            Question {idx + 1} of {questions.length}
           </span>
         </div>
         <div style={{ flex: 1, display: "flex", gap: 5, minWidth: 80 }}>
@@ -188,14 +211,14 @@ export function ExamRun({
                 : i === idx
                   ? "var(--navy)"
                   : v !== undefined && v !== ""
-                    ? "#a9a08f"
+                    ? "var(--ink-5)"
                     : "var(--track)";
             return (
               <button
                 key={x.id}
                 title={`Question ${i + 1}`}
                 onClick={() => i !== idx && goTo(i)}
-                style={{ flex: 1, height: 6, borderRadius: 9, background: bg, transition: "background .35s" }}
+                style={{ flex: 1, height: 5, borderRadius: 9, background: bg, transition: "background-color .3s ease" }}
               />
             );
           })}
@@ -214,7 +237,7 @@ export function ExamRun({
             gap: 6,
             font: "500 14px/1 var(--font)",
             padding: "9px 12px",
-            borderRadius: 99,
+            borderRadius: 6,
             background: lowTime ? "var(--wine-tint)" : "var(--paper)",
             color: lowTime ? "var(--wine)" : "var(--ink-3)",
             border: "1px solid var(--line)",
@@ -226,47 +249,47 @@ export function ExamRun({
       </div>
 
       {/* ---------- question ---------- */}
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", padding: "44px 24px 140px" }}>
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", padding: "36px 24px 140px" }}>
         <div
           style={{
             width: "100%",
-            maxWidth: 760,
+            maxWidth: 820,
             display: "flex",
             flexDirection: "column",
-            gap: 26,
+            gap: 24,
             opacity: fading ? 0 : 1,
-            transform: fading ? "translateY(-10px)" : "none",
-            transition: "opacity .22s, transform .22s var(--ease)",
+            transform: fading ? "translateY(-8px)" : "none",
+            transition: "opacity .2s ease, transform .2s var(--ease)",
           }}
+          className="exam-sheet"
         >
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {q.topic && <span className="tag">{q.topic}</span>}
-            <span className="tag" style={{ background: "var(--sand)", color: "var(--ink-3)" }}>
+            <span className="tag" style={{ background: "transparent", color: "var(--ink-4)", paddingLeft: 0 }}>
               {q.type === "mc" ? "Multiple choice" : q.type === "sa" ? "Short answer" : "Long answer"} · {q.marks} marks
             </span>
           </div>
-          <span style={{ font: "400 32px/1.3 var(--font)", letterSpacing: "-.01em", textWrap: "pretty", whiteSpace: "pre-wrap" }}>{q.text}</span>
+          <p className="exam-stem">
+            <b>{idx + 1}.</b>
+            <span>{q.text}</span>
+          </p>
 
           {q.type === "mc" ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, marginLeft: "2.1em" }}>
               {q.options.map((text, k) => {
                 let cls = "option";
-                let icon = "";
                 if (!isChecked && value === k) cls += " selected";
                 if (isChecked) {
-                  if (k === q.correct) {
-                    cls += " correct";
-                    icon = "check_circle";
-                  } else if (k === value) {
-                    cls += " wrong";
-                    icon = "cancel";
-                  } else cls += " dim";
+                  if (k === q.correct) cls += " correct";
+                  else if (k === value) cls += " wrong";
+                  else cls += " dim";
                 }
                 return (
                   <button key={k} className={cls} disabled={isChecked} onClick={() => pick(k)}>
                     <span className="letter">{String.fromCharCode(65 + k)}</span>
                     <span style={{ flex: 1, font: "500 16px/23px var(--font)", color: "var(--ink)" }}>{text}</span>
-                    {icon && <Icon name={icon} size={24} fill color={k === q.correct ? "var(--teal)" : "var(--wine)"} style={{ animation: "pop .35s both" }} />}
+                    {isChecked && k === q.correct && <PenRing />}
+                    {isChecked && k === value && (k === q.correct ? <PenTick /> : <PenCross />)}
                   </button>
                 );
               })}
@@ -275,7 +298,7 @@ export function ExamRun({
             <textarea
               className="field"
               autoFocus
-              style={{ minHeight: q.type === "la" ? 320 : 200, borderRadius: 18, padding: "18px 20px", font: "400 16px/25px var(--font)" }}
+              style={{ minHeight: q.type === "la" ? 320 : 200, borderRadius: 4, padding: "16px 18px", font: "400 18px/28px var(--serif)" }}
               placeholder="Type your answer. The grader awards partial credit for the key concepts."
               value={String(value ?? "")}
               onChange={(e) => setAnswers((a) => ({ ...a, [String(q.id)]: e.target.value }))}
@@ -283,22 +306,21 @@ export function ExamRun({
           )}
 
           {q.type === "mc" && isChecked && (
-            <div style={{ display: "flex", gap: 16, padding: 22, borderRadius: 18, background: correctNow ? "var(--teal-tint)" : "var(--wine-tint)", animation: "rise .4s var(--ease) both" }}>
-              <Icon name={correctNow ? "check_circle" : "lightbulb"} size={26} fill color={correctNow ? "var(--teal)" : "var(--wine)"} />
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}>
-                <span style={{ font: "500 20px/26px var(--font)", color: correctNow ? "var(--teal)" : "var(--wine)" }}>
-                  {correctNow ? "Correct." : `Not quite — the answer is ${q.options[q.correct]}.`}
-                </span>
-                {q.explanation && <span style={{ font: "400 15px/23px var(--font)", color: "var(--ink-2)", textWrap: "pretty" }}>{q.explanation}</span>}
-              </div>
+            <div role="status" style={{ display: "flex", flexDirection: "column", gap: 6, marginLeft: "2.1em", paddingTop: 4 }}>
+              <span className={correctNow ? "margin-note ok" : "margin-note"}>
+                {correctNow ? "Correct." : `Not quite — the answer is ${String.fromCharCode(65 + q.correct)}, ${q.options[q.correct]}.`}
+              </span>
+              {q.explanation && (
+                <span style={{ font: "400 15.5px/24px var(--font)", color: "var(--ink-2)", textWrap: "pretty", animation: "fade .3s .3s both" }}>{q.explanation}</span>
+              )}
             </div>
           )}
         </div>
       </div>
 
       {/* ---------- footer ---------- */}
-      <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, display: "flex", justifyContent: "center", padding: "16px 24px", background: "linear-gradient(to top, var(--cream) 60%, rgba(244,239,230,0))" }}>
-        <div style={{ width: "100%", maxWidth: 760, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+      <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, display: "flex", justifyContent: "center", padding: "16px 24px", background: "var(--cream)", borderTop: "1px solid var(--line)" }}>
+        <div style={{ width: "100%", maxWidth: 820, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
           <span style={{ font: "400 13px/18px var(--font)", color: "var(--ink-5)" }}>
             {q.type === "mc" ? (
               <>

@@ -72,7 +72,7 @@ export async function askCoach(input: CoachInput, onDelta: (delta: string) => vo
   const { text } = await getChatGPT().streamResponse({
     model: input.model,
     instructions:
-      `You are Exetasy's study coach for the university course "${course.name}"` +
+      `You are Exee AI's study coach for the university course "${course.name}"` +
       `${course.code ? ` (${course.code})` : ""}. You only help this student study this course: ` +
       "explain concepts, diagnose weak topics, and plan revision. If asked for anything " +
       "unrelated to studying this course, briefly decline and steer back. Ground explanations " +

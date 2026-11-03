@@ -1,6 +1,6 @@
 {
   "name": "exetasy-desktop",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "main": "./out/main/index.js",
@@ -24,6 +24,7 @@
     "mammoth": "^1.13.0"
   },
   "devDependencies": {
+    "@fontsource/newsreader": "^5.3.0",
     "@fontsource/poppins": "^5.2.7",
     "@resvg/resvg-js": "^2.6.2",
     "@siwc/react": "*",

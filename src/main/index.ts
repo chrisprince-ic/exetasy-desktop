@@ -1,9 +1,19 @@
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { app, BrowserWindow, shell } from "electron";
 import { registerIpc } from "./ipc.js";
 import { initStore } from "./store.js";
 
 let mainWindow: BrowserWindow | undefined;
+
+// The app was called Exetasy before it became Exee AI, and Electron names the
+// data folder after the product. If an earlier install left its data under the
+// old name and nothing exists under the new one, keep using the old folder so
+// courses, exams and the ChatGPT sign-in carry over.
+{
+  const legacy = join(app.getPath("appData"), "Exetasy");
+  if (existsSync(legacy) && !existsSync(app.getPath("userData"))) app.setPath("userData", legacy);
+}
 
 /** Only these origins are ever needed. Everything else is blocked. */
 const ALLOWED_ORIGINS = new Set(["https://auth.openai.com", "https://api.openai.com"]);
@@ -15,11 +25,11 @@ function createWindow(): void {
     minWidth: 900,
     minHeight: 640,
     show: false,
-    backgroundColor: "#F4EFE6",
+    backgroundColor: "#F5F3EE",
     autoHideMenuBar: true,
-    // macOS: let the cream sidebar run under the traffic lights.
+    // macOS: let the paper sidebar run under the traffic lights.
     titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
-    title: "Exetasy",
+    title: "Exee AI",
     // Dev runs from source where build/ is two levels up; the packaged app
     // gets its icon from the executable resources instead, so a miss here is
     // harmless.

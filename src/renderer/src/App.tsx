@@ -389,7 +389,7 @@ export function App() {
         overview: [`${greeting()}, ${name}`, `${longDate(new Date())}${countdown ? ` · ${countdown}` : ""}`],
         exams: ["Practice exams", `Generated from your materials, calibrated to ${courseTag}`],
         flashcards: ["Flashcards", "Spaced repetition · missed cards return sooner"],
-        materials: ["Study materials", `Everything Exetasy has read for ${courseTag}`],
+        materials: ["Study materials", `Everything Exee AI has read for ${courseTag}`],
         plan: ["Study plan", countdown ? `Counting down to ${course?.examLabel || "your exam"} · ${countdown.toLowerCase()}` : "A rolling week, weighted toward your weakest topics"],
         coach: ["AI coach", "Grounded in your materials and your results"],
         settings: ["Settings", "Account, model, and where your data lives"],
@@ -400,7 +400,7 @@ export function App() {
       <EmptyState
         icon="school"
         title="Start with a course"
-        body="Create a course, add your slides or notes, and Exetasy writes practice exams and flashcards from them — on your own ChatGPT plan."
+        body="Create a course, add your slides or notes, and Exee AI writes practice exams and flashcards from them — on your own ChatGPT plan."
         action={
           <button className="btn btn-primary" onClick={() => setCourseDialog("new")}>
             Create your first course
@@ -554,7 +554,7 @@ export function App() {
               alignItems: "center",
               gap: 14,
               padding: "16px 20px",
-              borderRadius: 18,
+              borderRadius: 10,
               background: "var(--wine-tint)",
               color: "var(--wine)",
             }}
@@ -618,11 +618,11 @@ function Welcome({ onSignIn, busy, error }: { onSignIn: () => void; busy: boolea
         }}
       >
         <Logo size={44} />
-        <h1 className="display rise" style={{ fontSize: 46, lineHeight: 1.08 }}>
-          Practice exams from <em style={{ color: "var(--wine)" }}>your own notes</em>.
+        <h1 className="display rise" style={{ fontSize: 40, lineHeight: 1.08 }}>
+          Practice exams from your own notes
         </h1>
         <p className="rise" style={{ font: "400 16px/25px var(--font)", color: "var(--ink-3)", maxWidth: 480, animationDelay: ".06s" }}>
-          Exetasy turns your slides and notes into realistic practice exams, grades your answers, and builds a study plan
+          Exee AI turns your slides and notes into realistic practice exams, grades your answers, and builds a study plan
           around your weakest topics. It runs on your computer and uses your own ChatGPT plan, so it costs you nothing
           extra.
         </p>
@@ -635,7 +635,7 @@ function Welcome({ onSignIn, busy, error }: { onSignIn: () => void; busy: boolea
         </div>
 
         {error && (
-          <div style={{ padding: "12px 16px", borderRadius: 14, background: "var(--wine-tint)", color: "var(--wine)", font: "400 13.5px/20px var(--font)" }}>
+          <div style={{ padding: "12px 16px", borderRadius: 8, background: "var(--wine-tint)", color: "var(--wine)", font: "400 13.5px/20px var(--font)" }}>
             {error}
           </div>
         )}
@@ -647,7 +647,7 @@ function Welcome({ onSignIn, busy, error }: { onSignIn: () => void; busy: boolea
             ["task_alt", "Graded with feedback"],
           ].map(([icon, text]) => (
             <span key={text} style={{ display: "inline-flex", alignItems: "center", gap: 7, font: "500 13px/1 var(--font)", color: "var(--ink-4)" }}>
-              <Icon name={icon!} size={17} color="var(--teal)" />
+              <Icon name={icon!} size={17} color="var(--ink-4)" />
               {text}
             </span>
           ))}
@@ -659,7 +659,7 @@ function Welcome({ onSignIn, busy, error }: { onSignIn: () => void; busy: boolea
           className="card-navy rise"
           style={{
             flex: 1,
-            borderRadius: 28,
+            borderRadius: 10,
             padding: 40,
             display: "flex",
             flexDirection: "column",
@@ -670,20 +670,16 @@ function Welcome({ onSignIn, busy, error }: { onSignIn: () => void; busy: boolea
             animationDelay: ".1s",
           }}
         >
-          <div style={{ position: "absolute", right: -80, top: -80, width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(233,199,127,.14)" }} />
-          <div style={{ position: "absolute", right: -30, top: -30, width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(233,199,127,.1)" }} />
-          <span className="eyebrow" style={{ color: "var(--gold)" }}>How it works</span>
+          <span className="eyebrow" style={{ color: "var(--on-navy-2)" }}>How it works</span>
           {[
             ["upload_file", "Add your material", "Slides, PDFs, Word files or pasted notes. Scanned pages are read with on-device OCR."],
             ["quiz", "Practise like it's the real thing", "Questions in your professor's style, timed and graded with feedback."],
             ["insights", "Know when you're ready", "A readiness score per topic, and a plan that works back from your exam date."],
           ].map(([icon, head, body]) => (
             <div key={head} style={{ display: "flex", gap: 16, position: "relative" }}>
-              <span style={{ width: 44, height: 44, borderRadius: 14, background: "rgba(233,199,127,.14)", color: "var(--gold)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Icon name={icon!} size={22} />
-              </span>
+              <Icon name={icon!} size={22} color="var(--on-navy-2)" style={{ marginTop: 3 }} />
               <span style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <span style={{ font: "500 17px/22px var(--font)" }}>{head}</span>
+                <span style={{ font: "500 21px/26px var(--serif)", letterSpacing: "-.01em" }}>{head}</span>
                 <span style={{ font: "400 14px/21px var(--font)", color: "var(--on-navy-2)" }}>{body}</span>
               </span>
             </div>

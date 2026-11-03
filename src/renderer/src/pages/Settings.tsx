@@ -54,8 +54,8 @@ export function Settings({
               </button>
             </div>
             {!sharing && (
-              <div style={{ padding: 16, borderRadius: 14, background: "var(--wine-tint)", color: "var(--wine)", font: "400 13.5px/20px var(--font)" }}>
-                You&rsquo;re signed in, but this account hasn&rsquo;t granted Exetasy permission to use your ChatGPT plan. That permission only exists on Go, Plus and Pro subscriptions.
+              <div style={{ padding: 16, borderRadius: 8, background: "var(--wine-tint)", color: "var(--wine)", font: "400 13.5px/20px var(--font)" }}>
+                You&rsquo;re signed in, but this account hasn&rsquo;t granted Exee AI permission to use your ChatGPT plan. That permission only exists on Go, Plus and Pro subscriptions.
               </div>
             )}
             <button className="btn btn-sm btn-soft" style={{ alignSelf: "flex-start" }} onClick={onOpenUsage}>
@@ -66,7 +66,7 @@ export function Settings({
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "flex-start" }}>
             <p style={{ font: "400 14.5px/22px var(--font)", color: "var(--ink-4)" }}>
-              Connect your ChatGPT account to generate exams. Exetasy charges you nothing — generation runs on your own plan allowance.
+              Connect your ChatGPT account to generate exams. Exee AI charges you nothing — generation runs on your own plan allowance.
             </p>
             <ContinueWithChatGPTButton onClick={onSignIn} loading={signingIn} appearance="black" />
           </div>
@@ -109,8 +109,8 @@ export function Settings({
             ["Exams", stats?.exams],
             ["Attempts", stats?.attempts],
           ].map(([label, value]) => (
-            <div key={label as string} style={{ padding: "14px 16px", borderRadius: 14, background: "var(--hover)" }}>
-              <div className="tnum" style={{ font: "400 28px/1.1 var(--font)" }}>{value ?? 0}</div>
+            <div key={label as string} style={{ padding: "14px 16px", borderRadius: 8, background: "var(--hover)" }}>
+              <div className="tnum" style={{ font: "500 28px/1.1 var(--serif)" }}>{value ?? 0}</div>
               <div style={{ font: "500 12.5px/16px var(--font)", color: "var(--ink-4)", marginTop: 2 }}>{label}</div>
             </div>
           ))}
@@ -123,7 +123,7 @@ export function Settings({
       <section className="card rise" style={{ display: "flex", flexDirection: "column", gap: 10, animationDelay: ".15s" }}>
         <h2 className="h-card">About</h2>
         <p style={{ font: "400 14px/22px var(--font)", color: "var(--ink-3)" }}>
-          Exetasy is a free, noncommercial, open-source study tool. There is no paid tier and nothing is sold. It integrates OpenAI&rsquo;s Sign in with ChatGPT DevKit, which is licensed for noncommercial use only.
+          Exee AI is a free, noncommercial, open-source study tool. There is no paid tier and nothing is sold. It integrates OpenAI&rsquo;s Sign in with ChatGPT DevKit, which is licensed for noncommercial use only.
         </p>
         <p style={{ font: "400 13px/20px var(--font)", color: "var(--ink-5)" }}>Questions and grades are AI-generated. Treat them as practice, not as a source of truth.</p>
       </section>
